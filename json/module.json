@@ -1,0 +1,28 @@
+[
+	{
+		"id": 1,
+		"moduleName": "全部",
+		"iconClass": "glyphicon glyphicon-tasks",
+		"fileType": "all"
+	}, {
+		"id": 2,
+		"moduleName": "文档",
+		"iconClass": "glyphicon glyphicon-file",
+		"fileType": "doc,txt"
+	}, {
+		"id": 3,
+		"moduleName": "图片",
+		"iconClass": "glyphicon glyphicon-picture",
+		"fileType": "jpg,png"
+	}, {
+		"id": 4,
+		"moduleName": "视频",
+		"iconClass": "glyphicon glyphicon-film",
+		"fileType": "mp4,avi"
+	}, {
+		"id": 5,
+		"moduleName": "音乐",
+		"iconClass": "glyphicon glyphicon-headphones",
+		"fileType": "mp3"
+	}
+]

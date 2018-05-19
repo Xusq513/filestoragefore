@@ -1,0 +1,27 @@
+[
+	{
+		"id": 1,
+		"fileName": "生活文件夹",
+		"fileType": "dir",
+		"fileSize":"",
+		"lastModifyTime" : "2018-05-02 11:20:00"
+	}, {
+		"id": 2,
+		"fileName": "运动文件夹",
+		"fileType": "dir",
+		"fileSize":"",
+		"lastModifyTime" : "2018-05-03 15:40:06"
+	}, {
+		"id": 3,
+		"fileName": "告白气球.mp3",
+		"fileType": "mp3",
+		"fileSize":"212000",
+		"lastModifyTime" : "2018-05-04 11:20:00"
+	}, {
+		"id": 4,
+		"fileName": "天津旅游纪念.mp4",
+		"fileType": "mp4",
+		"fileSize":"2222000",
+		"lastModifyTime" : "2018-05-05 11:20:00"
+	}
+]

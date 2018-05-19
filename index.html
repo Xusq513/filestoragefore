@@ -11,13 +11,14 @@
 		<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/ie10-viewport-bug-workaround.css" />
 		<link rel="stylesheet" href="css/dashboard.css" />
+		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 		<script type="text/javascript" src="js/ie-emulation-modes-warning.js"></script>
 		<!-- vue -->
 		<script type="text/javascript" src="js/vue.js" ></script>
 		<script type="text/javascript" src="js/config.js" ></script>
 	</head>
 
-	<body >
+	<body oncontextmenu="doNothing()">
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="container-fluid">
 				<div class="navbar-header">
@@ -44,39 +45,30 @@
 							<a href="#">帮助</a>
 						</li>
 					</ul>
-					<form class="navbar-form navbar-right">
-						<input type="text" class="form-control" placeholder="搜索...">
-					</form>
 				</div>
 			</div>
 		</nav>
 
-		<div class="container-fluid">
+		<div class="container-fluid" id="container">
 			<div class="row">
 				<div class="col-sm-3 col-md-2 sidebar">
+					 
 					<ul class="nav nav-sidebar">
-						<li class="active">
-							<a href="#">Overview <span class="sr-only">(current)</span></a>
-						</li>
-						<li>
-							<a href="#">Reports</a>
-						</li>
-						<li>
-							<a href="#">Analytics</a>
-						</li>
-						<li>
-							<a href="#">Export</a>
+						<li class="col-md-10">
+							<input type="text" class="form-control" placeholder="搜索...">
 						</li>
 					</ul>
+					
 					<ul class="nav nav-sidebar" id="module">
 						
-						<li v-for="item in moduleData">
+						<li v-for="item in moduleData" v-on:click="switchView(item)">
 							
 							<a href="javascript:void(0)"  :fileType="item.fileType">
 								<span :class="item.iconClass" aria-hidden="true"></span>
 								<span>{{item.moduleName}}</span></a>
 						</li>
 					</ul>
+					<!--
 					<ul class="nav nav-sidebar">
 						<li>
 							<a href="">Nav item again</a>
@@ -87,11 +79,24 @@
 						<li>
 							<a href="">Another nav item</a>
 						</li>
-					</ul>
+					</ul>-->
 				</div>
+				
 				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-					<h1 class="page-header">面板</h1>
+					<div>
+						<button type="button" class="btn btn-primary">上传文件</button>
+						<button type="button" class="btn btn-primary" onclick="createDir('1')">新建文件夹</button>
+					</div>
 
+					<h5>
+						<ol class="breadcrumb">
+							<li v-for="path in filePath"><a href="#">{{path.name}}</a></li>
+							<!--<li><a href="#">文件夹一</a></li>
+							<li class="active">生活</li>-->
+						</ol>
+					</h5>
+					
+					<!-- 
 					<div class="row placeholders">
 						<div class="col-xs-6 col-sm-3 placeholder">
 							<img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
@@ -114,141 +119,51 @@
 							<span class="text-muted">Something else</span>
 						</div>
 					</div>
-
-					<h2 class="sub-header">Section title</h2>
-					<div class="table-responsive">
-						<table class="table table-striped">
+					-->
+					<div class="table-responsive" v-if="view === 'all'">
+						<table class="table table-hover">
 							<thead>
 								<tr>
-									<th>#</th>
-									<th>Header</th>
-									<th>Header</th>
-									<th>Header</th>
-									<th>Header</th>
+									<th>
+										<input type="checkbox" name="fileCheck">
+									</th>
+									<th>名称</th>
+									<th>最后一次修改时间</th>
+									<th>文件大小</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>1,001</td>
-									<td>Lorem</td>
-									<td>ipsum</td>
-									<td>dolor</td>
-									<td>sit</td>
+								
+								<tr v-for="fileItem in fileItems" v-on:dblclick="showChildDir(fileItem)" data-toggle="context" data-target="#context-menu">
+									<td><input type="checkbox" name="fileCheck"></td>
+									<td>
+										<img src="img/icon-file-m.svg" v-if="fileItem.fileType === 'dir'"></img>
+										<img src="img/icon-nor-m.svg" v-else ></img>
+										<input type="text" v-if="fileItem.type === 'input'" v-model="fileItem.fileName"
+										 v-on:blur="createDir(fileItem);">
+										<span v-else>{{fileItem.fileName}}</span>
+										</td>
+									<td>{{fileItem.lastModifyTime}}</td>
+									<td>{{calFileSize(fileItem.fileSize)}}</td>
 								</tr>
-								<tr>
-									<td>1,002</td>
-									<td>amet</td>
-									<td>consectetur</td>
-									<td>adipiscing</td>
-									<td>elit</td>
-								</tr>
-								<tr>
-									<td>1,003</td>
-									<td>Integer</td>
-									<td>nec</td>
-									<td>odio</td>
-									<td>Praesent</td>
-								</tr>
-								<tr>
-									<td>1,003</td>
-									<td>libero</td>
-									<td>Sed</td>
-									<td>cursus</td>
-									<td>ante</td>
-								</tr>
-								<tr>
-									<td>1,004</td>
-									<td>dapibus</td>
-									<td>diam</td>
-									<td>Sed</td>
-									<td>nisi</td>
-								</tr>
-								<tr>
-									<td>1,005</td>
-									<td>Nulla</td>
-									<td>quis</td>
-									<td>sem</td>
-									<td>at</td>
-								</tr>
-								<tr>
-									<td>1,006</td>
-									<td>nibh</td>
-									<td>elementum</td>
-									<td>imperdiet</td>
-									<td>Duis</td>
-								</tr>
-								<!--
-								<tr>
-									<td>1,007</td>
-									<td>sagittis</td>
-									<td>ipsum</td>
-									<td>Praesent</td>
-									<td>mauris</td>
-								</tr>
-								<tr>
-									<td>1,008</td>
-									<td>Fusce</td>
-									<td>nec</td>
-									<td>tellus</td>
-									<td>sed</td>
-								</tr>
-								<tr>
-									<td>1,009</td>
-									<td>augue</td>
-									<td>semper</td>
-									<td>porta</td>
-									<td>Mauris</td>
-								</tr>
-								<tr>
-									<td>1,010</td>
-									<td>massa</td>
-									<td>Vestibulum</td>
-									<td>lacinia</td>
-									<td>arcu</td>
-								</tr>
-								<tr>
-									<td>1,011</td>
-									<td>eget</td>
-									<td>nulla</td>
-									<td>Class</td>
-									<td>aptent</td>
-								</tr>
-								<tr>
-									<td>1,012</td>
-									<td>taciti</td>
-									<td>sociosqu</td>
-									<td>ad</td>
-									<td>litora</td>
-								</tr>
-								<tr>
-									<td>1,013</td>
-									<td>torquent</td>
-									<td>per</td>
-									<td>conubia</td>
-									<td>nostra</td>
-								</tr>
-								<tr>
-									<td>1,014</td>
-									<td>per</td>
-									<td>inceptos</td>
-									<td>himenaeos</td>
-									<td>Curabitur</td>
-								</tr>
-								<tr>
-									<td>1,015</td>
-									<td>sodales</td>
-									<td>ligula</td>
-									<td>in</td>
-									<td>libero</td>
-								</tr>
-								 -->
 							</tbody>
 						</table>
+					</div>
+					<div class="table-responsive" v-if="view !== 'all'">
+					     else
 					</div>
 				</div>
 			</div>
 		</div>
 
+		<div id="context-menu">
+	      	<ul class="dropdown-menu" role="menu">
+            <li><a tabindex="-1">下载</a></li>
+	           <li><a tabindex="-1">移动</a></li>
+	           <li><a tabindex="-1">删除</a></li>
+	           <li><a tabindex="-1">重命名</a></li>
+	      	</ul>
+	      </div>
 		<!-- Bootstrap core JavaScript
     ================================================== -->
 		<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
@@ -260,6 +175,8 @@
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 		<script type="text/javascript" src="js/ie10-viewport-bug-workaround.js"></script>
 		<script type="text/javascript" src="js/index.js" ></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.js"></script>
+		<script type="text/javascript" src="js/bootstrap-contextmenu.js"></script>
 	</body>
 
 </html>

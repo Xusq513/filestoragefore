@@ -18,7 +18,7 @@
 		<script type="text/javascript" src="js/config.js" ></script>
 	</head>
 
-	<body oncontextmenu="doNothing()">
+	<body oncontextmenu="index.doNothing()">
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="container-fluid">
 				<div class="navbar-header">
@@ -85,12 +85,12 @@
 				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 					<div>
 						<button type="button" class="btn btn-primary">上传文件</button>
-						<button type="button" class="btn btn-primary" onclick="createDir('1')">新建文件夹</button>
+						<button type="button" class="btn btn-primary" onclick="index.createDir('1')">新建文件夹</button>
 					</div>
 
 					<h5>
 						<ol class="breadcrumb">
-							<li v-for="path in filePath"><a href="#">{{path.name}}</a></li>
+							<li v-for="path in filePath" v-on:click="selectDir(path)"><a href="#">{{path.name}}</a></li>
 							<!--<li><a href="#">文件夹一</a></li>
 							<li class="active">生活</li>-->
 						</ol>
@@ -132,15 +132,14 @@
 									<th>文件大小</th>
 								</tr>
 							</thead>
-							<tbody>
-								
-								<tr v-for="fileItem in fileItems" v-on:dblclick="showChildDir(fileItem)" data-toggle="context" data-target="#context-menu">
+							<tbody class="context"  data-toggle="context">
+								<tr  v-for="fileItem in fileItems" v-on:dblclick="showChildDir(fileItem)" :id="fileItem.id">
 									<td><input type="checkbox" name="fileCheck"></td>
 									<td>
 										<img src="img/icon-file-m.svg" v-if="fileItem.fileType === 'dir'"></img>
 										<img src="img/icon-nor-m.svg" v-else ></img>
 										<input type="text" v-if="fileItem.type === 'input'" v-model="fileItem.fileName"
-										 v-on:blur="createDir(fileItem);">
+										 v-on:blur="saveDir(fileItem);">
 										<span v-else>{{fileItem.fileName}}</span>
 										</td>
 									<td>{{fileItem.lastModifyTime}}</td>
@@ -158,10 +157,10 @@
 
 		<div id="context-menu">
 	      	<ul class="dropdown-menu" role="menu">
-            <li><a tabindex="-1">下载</a></li>
-	           <li><a tabindex="-1">移动</a></li>
-	           <li><a tabindex="-1">删除</a></li>
-	           <li><a tabindex="-1">重命名</a></li>
+            <li><a tabindex="-1" action="download">下载</a></li>
+	           <li><a tabindex="-1" action="move">移动</a></li>
+	           <li><a tabindex="-1" action="delete">删除</a></li>
+	           <li><a tabindex="-1" action="rename">重命名</a></li>
 	      	</ul>
 	      </div>
 		<!-- Bootstrap core JavaScript

@@ -11,6 +11,7 @@
 		<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/ie10-viewport-bug-workaround.css" />
 		<link rel="stylesheet" href="css/dashboard.css" />
+		<link href="css/common.css" rel="stylesheet" />
 		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 		<script type="text/javascript" src="js/ie-emulation-modes-warning.js"></script>
 		<!-- vue -->
@@ -49,7 +50,7 @@
 			</div>
 		</nav>
 
-		<div class="container-fluid" id="container">
+		<div class="container-fluid" id="container" v-cloak>
 			<div class="row">
 				<div class="col-sm-3 col-md-2 sidebar">
 					 
@@ -167,6 +168,8 @@
     ================================================== -->
 		<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
 		<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+		<!-- 加载弹出层 -->
+		<script src="layer-v3.1.1/layer-v3.1.1/layer/layer.js"></script>
 		<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 		<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<!-- Just to make our placeholder images work. Don't actually copy the next line! -->

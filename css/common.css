@@ -126,3 +126,10 @@ textarea {
 	*display: inline;
 	*zoom: 1;
 }
+
+/*
+ * 解决vue闪烁问题
+ */
+[v-cloak]{
+	display: none;
+}

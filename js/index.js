@@ -190,8 +190,8 @@ $(function () {
 							}
 						}
 						break;
-					case 'move' : 
-						alert('move');
+					case 'move' :
+						layer.alert('move', {icon: 6});
 						break;
 					case 'download':
 						alert('download');

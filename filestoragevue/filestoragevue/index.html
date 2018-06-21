@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>易存储云盘</title>
+		<script>
+			/**
+			 * 屏蔽原生的右键事件
+			 */
+			function doNothing (){  
+				window.event.returnValue=false;  
+				return false;  
+			}
+		</script>
+  </head>
+  <body oncontextmenu="doNothing()">
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>

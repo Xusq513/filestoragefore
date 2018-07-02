@@ -15,6 +15,8 @@
 	       上传文件
 	       </file-upload>
 	        <button type="button" class="btn btn-primary" v-on:click="createDir()">新建文件夹</button>
+					<i id="niceView" class="file-icon" title="切换到缩略视图" @click="switchView(false)"></i>
+					<i id="listView" class="file-icon" title="切换到列表视图" @click="switchView(true)"></i>
 	    </div>
 	
 	    <h5>
@@ -26,7 +28,7 @@
 	        </ol>
 	    </h5>
 	    <div class="table-responsive">
-	        <table class="table table-hover">
+	        <table class="table table-hover" v-show="isShowFileListView">
 	            <thead>
 	                <tr>
 	                    <th>
@@ -43,7 +45,8 @@
 	                        <input type="checkbox" name="fileCheck">
 	                    </td>
 	                    <td>
-	                        <img :src="getImgUrl(fileItem)"></img>
+	                        <img :src="getImgUrl(fileItem)" v-if="fileItem.fileType !== 'jpg'" ></img>
+													<img :src="fileItem.downloadUrl" v-else class="imgIcon"></img>
 	                        <input type="text" v-if="fileItem.type === 'input'" v-model="fileItem.fileName" v-on:blur="saveDir(fileItem);">
 	                        <span v-else>{{fileItem.fileName}}</span>
 	                    </td>
@@ -52,6 +55,26 @@
 	                </tr>
 	            </tbody>
 	        </table>
+					<div  v-show="!isShowFileListView">
+							<div class="row">
+									<div v-for="dirItem in fileItems" v-on:dblclick="showChildDir(dirItem)" 
+										v-if="dirItem.fileType === 'dir'" :id="dirItem.id" class="col-md-2 dir-row col-md-1-5">
+										 <img :src="getImgUrl(dirItem)" style="display: block;"></img>
+										 <input type="text" v-if="dirItem.type === 'input'" v-model="dirItem.fileName" v-on:blur="saveDir(dirItem);">
+										 <span v-else>{{dirItem.fileName}}</span>
+									</div>
+							</div>
+							  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=2) " width="100%" color=#987cb9 SIZE=10></hr>
+							<div class="row">
+									<div v-for="fileItem in fileItems" v-on:dblclick="showChildDir(fileItem)" 
+										v-if="fileItem.fileType !== 'dir'" :id="fileItem.id" class="col-md-2 dir-row">
+										<img :src="getImgUrl(fileItem)" v-if="fileItem.fileType !== 'jpg'" style="display: block;"></img>
+										<img :src="fileItem.downloadUrl" v-else class="fileIcon" style="display: block;"></img>
+										<input type="text" v-if="fileItem.type === 'input'" v-model="fileItem.fileName" v-on:blur="saveDir(fileItem);">
+										<span v-else>{{fileItem.fileName}}</span>
+									</div>
+							</div>
+					</div>
 	    </div>
 			
 			<div id="context-menu">
@@ -111,7 +134,9 @@ export default {
 					audio : require('../assets/images/icon-audio-m.svg'),
 				},
 				// 右键当前操作文件的主键
-				dbOperateFileId : ''
+				dbOperateFileId : '',
+				// 是否显示文件列表
+				isShowFileListView : true
     }
   },
 	mounted (){
@@ -196,7 +221,7 @@ export default {
       // 如果不是文件夹就根据下载链接新建窗口进行打开
       if (fileItem.fileType != 'dir') {
 				if(fileItem.downloadUrl)
-					window.open(fileItem.downloadUrl);
+					window.open(`${fileItem.downloadUrl}?attname=${fileItem.fileName}`);
         return;
 		  // 如果是文件夹的话，查询文件夹下的内容并且增加目录
       } else {
@@ -432,11 +457,106 @@ export default {
         }
       }
     }
-		
+		,
+		switchView(showType){
+			this.isShowFileListView = showType;
+		}
+	},
+	watch : {
+		isShowFileListView (newVal,oldVal){
+			if(newVal){
+				this.imgUrl = {
+					dir : require('../assets/images/icon-file-m.svg'),
+					file : require('../assets/images/icon-nor-m.svg'),
+					doc : require('../assets/images/icon-doc-m.svg'),
+					xls : require('../assets/images/icon-xls-m.svg'),
+					ppt : require('../assets/images/icon-ppt-m.svg'),
+					zip : require('../assets/images/icon-zip-m.svg'),
+					audio : require('../assets/images/icon-audio-m.svg'),
+				}
+			}else{
+				this.imgUrl = {
+					dir : require('../assets/images/icon-file-l.svg'),
+					file : require('../assets/images/icon-nor-l.svg'),
+					doc : require('../assets/images/icon-doc-l.svg'),
+					xls : require('../assets/images/icon-xls-l.svg'),
+					ppt : require('../assets/images/icon-ppt-l.svg'),
+					zip : require('../assets/images/icon-zip-l.svg'),
+					audio : require('../assets/images/icon-audio-l.svg')
+				}
+			}
+		}
+	},
+	computed : {
+		dirByRow (){
+			// 每行放11个文件夹
+			const NUM = 11;
+			var fileItemsFiter = this.fileItems.filter(item => item.fileType === 'dir');
+			var allArray = [];
+			var rowArray = [];
+			for(let itemIndex in fileItemsFiter){
+				let remaider = itemIndex % NUM;
+				rowArray.push(fileItemsFiter[itemIndex]);
+				if(remaider == 10){
+					allArray.push(rowArray);
+					rowArray = [];
+				}
+			}
+			if(rowArray.length != 0){
+				allArray.push(rowArray);
+			}
+			return allArray;
+		}
 	}
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+	.imgIcon{
+		 width:auto;
+		 height:auto;
+		 max-width:10%;
+		 max-height:10%;
+	}
+	
+	.fileIcon{
+		width:134px;
+		height:134px;
+		max-width:134px;
+		max-height:134px;
+	}
+	
+	#listView{
+		background-image: url(../assets/images/icon-mode-list-act.svg);
+	
+	}
+	
+	#niceView{
+		background-image: url(../assets/images/icon-mode-thumb.svg);
+	}
+	
+	.file-icon{
+		display: inline-block;
+		height: 24px;
+		width: 24px;
+		float: right;
+		margin-right: 10px;
+		margin-top: 4px;
+		cursor: pointer;
+	}
+	
+	.row{
+		margin-right : 0px;
+		margin-left : 0px;
+	}
+	
+	.dir-row{
+		text-align: center;
+		margin-top: 13px;
+	}
+	
+	.col-md-1-5{
+		width: 12%;
+	}
 </style>

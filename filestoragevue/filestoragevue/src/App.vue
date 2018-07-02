@@ -1,19 +1,14 @@
 <template>
 	<div>
-		<Header></Header>
-		<Bodyer></Bodyer>
+		<keep-alive>
+			<router-view></router-view>
+		</keep-alive>
 	</div>
 </template>
 
 <script>
-import Header from './components/Header'
-import Bodyer from './components/Body'
 export default {
-  name: 'App',
-	components : {
-		Header,
-		Bodyer
-	}
+  name: 'App'
 }
 </script>
 

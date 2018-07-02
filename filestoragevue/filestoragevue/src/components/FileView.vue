@@ -1,6 +1,8 @@
 <template>
   <div class="example-simple">
-   <button type="button" class="btn btn-primary" v-tooltip.top-center="'ggggg'">Hover me</button>
+   <div class="file-grid col-md-2">
+		 
+	 </div>
   </div>
 </template>
 <style>
@@ -15,3 +17,9 @@ export default {
   }
 }
 </script>
+<style>
+		.file-grid{
+			background-color: red;
+			height: 150px;
+		}
+</style>

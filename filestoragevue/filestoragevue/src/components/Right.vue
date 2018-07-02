@@ -20,9 +20,10 @@ export default {
       Bus.$on('fileType', (e) => {
 		  var fileType = e;
 		  if(fileType !== 'all'){
-			 t.$router.push("/fileView") 
+			 t.$router.push({name:'FileView'}) 
 		  }else{
-			 t.$router.push("/") 
+			t.$router.push({name:'DirView'}) 
+
 		  }
       });
 	  

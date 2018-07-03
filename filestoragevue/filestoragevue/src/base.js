@@ -1,3 +1,3 @@
 exports.install = function (Vue, options) {
-   Vue.prototype.baseUrl = 'http://118.190.217.172:8899/';
+   Vue.prototype.baseUrl = 'http://localhost:8899/';
 };
